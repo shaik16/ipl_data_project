@@ -3,6 +3,7 @@ const csv = require('csvtojson');
 const path = require('path');
 
 const matchesPerYear = require('./ipl_stats/matchesPerYear');
+const teamWonMatchesPerYear= require('./ipl_stats/teamWonMatchesPerYear')
 
 const csvFilePath = path.join(__dirname, '../data');
 const outputPath = path.join(__dirname, '../public/output');
@@ -23,7 +24,10 @@ csv()
     csv()
       .fromFile(`${csvFilePath}/deliveries.csv`)
       .then((deliveriesArray) => {
+
           writeFile('matchesPerYear.json', matchesPerYear(matchesArray));
+          writeFile('teamWonPerYear.json', teamWonMatchesPerYear(matchesArray));
+
       })
       .catch((err) => {
         if (err) {
