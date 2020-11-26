@@ -5,6 +5,5 @@
     "endOfLine": "auto",
     "printWidth": 100,
     "quoteProps": "as-needed",
-    "tabWidth": 2,
-    "useTabs": true
+    "tabWidth": 2
 }
