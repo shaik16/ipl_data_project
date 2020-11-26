@@ -12,7 +12,8 @@
   },
   "rules": {
     // "no-unused-vars": "warn",
-    "no-console": "off"
+    "no-console": "off",
+    "eqeqeq":"off"
     // "func-names":"off",
     // "prettier/prettier":"error",
     // "class-methods-use-this":"off"

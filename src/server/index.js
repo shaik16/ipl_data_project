@@ -3,7 +3,8 @@ const csv = require('csvtojson');
 const path = require('path');
 
 const matchesPerYear = require('./ipl_stats/matchesPerYear');
-const teamWonMatchesPerYear= require('./ipl_stats/teamWonMatchesPerYear')
+const teamWonMatchesPerYear = require('./ipl_stats/teamWonMatchesPerYear');
+const extraRunsConcededPerTeam = require('./ipl_stats/extraRunsConcededPerTeam');
 
 const csvFilePath = path.join(__dirname, '../data');
 const outputPath = path.join(__dirname, '../public/output');
@@ -24,10 +25,15 @@ csv()
     csv()
       .fromFile(`${csvFilePath}/deliveries.csv`)
       .then((deliveriesArray) => {
+          
+        writeFile('matchesPerYear.json', matchesPerYear(matchesArray));
+        writeFile('teamWonMatchesPerYear.json', teamWonMatchesPerYear(matchesArray));
 
-          writeFile('matchesPerYear.json', matchesPerYear(matchesArray));
-          writeFile('teamWonPerYear.json', teamWonMatchesPerYear(matchesArray));
-
+        writeFile(
+          'extraRunsConcededPerTeam.json',
+          extraRunsConcededPerTeam(matchesArray, deliveriesArray, 2016)
+        );
+        
       })
       .catch((err) => {
         if (err) {
@@ -40,5 +46,3 @@ csv()
       console.error(Error('Error Occurred While Processing Matches csv file'));
     }
   });
-
-
