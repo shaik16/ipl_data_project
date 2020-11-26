@@ -32,15 +32,12 @@ const topTenEconomicBowlers = (matchesArray, deliveriesArray, year) => {
     const over = economicBowlersObject[year][obj]['overs'] * (10 / 6);
 
     economicBowlersObject[year][obj]['economy'] = (
-      (economicBowlersObject[year][obj]['total_runs'] / over) *
-      10
-    ).toFixed(2);
+      (economicBowlersObject[year][obj]['total_runs'] / over) * 10).toFixed(2);
 
     economicBowlersObject[year][obj]['overs'] =
       Math.floor(economicBowlersObject[year][obj]['overs'] / 6) +
       (economicBowlersObject[year][obj]['overs'] -
-        Math.floor(economicBowlersObject[year][obj]['overs'] / 6) * 6) /
-        10;
+        Math.floor(economicBowlersObject[year][obj]['overs'] / 6) * 6) / 10;
 
     return Number(economicBowlersObject[year][obj]['economy']);
   });

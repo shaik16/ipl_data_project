@@ -5,6 +5,7 @@ const matchesPerYear = (matchesArray) => {
     } else {
       acc[obj.season] += 1;
     }
+    
     return acc;
   }, {});
 
