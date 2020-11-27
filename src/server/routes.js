@@ -40,8 +40,14 @@ const routes = (req, res) => {
     case '/charts/matchesPerYearChart.js':
       response(`${publicPath}/charts/matchesPerYearChart.js`, 'text/javascript', res);
       break;
+    case '/charts/teamWonPerYearChart.js':
+      response(`${publicPath}/charts/teamWonPerYearChart.js`, 'text/javascript', res);
+      break;
     case '/api/matchesPerYear':
       response(`${publicPath}/output/matchesPerYear.json`, 'application/json', res);
+      break;
+    case '/api/teamWonPerYear':
+      response(`${publicPath}/output/teamWonMatchesPerYear.json`, 'application/json', res);
       break;
     default:
       response(`${publicPath}/404.html`, 'text/html', res);
