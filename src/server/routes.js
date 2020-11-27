@@ -46,6 +46,9 @@ const routes = (req, res) => {
     case '/charts/extraRunsConcededPerTeam.js':
       response(`${publicPath}/charts/extraRunsConcededPerTeam.js`, 'text/javascript', res);
       break;
+    case '/charts/topTenEconomicBowlers.js':
+      response(`${publicPath}/charts/topTenEconomicBowlers.js`, 'text/javascript', res);
+      break;
     case '/api/matchesPerYear':
       response(`${publicPath}/output/matchesPerYear.json`, 'application/json', res);
       break;
@@ -54,6 +57,9 @@ const routes = (req, res) => {
       break;
     case '/api/extraRunsPerTeam':
       response(`${publicPath}/output/extraRunsConcededPerTeam.json`, 'application/json', res);
+      break;
+    case '/api/topTenEconomicBowlers':
+      response(`${publicPath}/output/topTenEconomicBowlers.json`, 'application/json', res);
       break;
     default:
       response(`${publicPath}/404.html`, 'text/html', res);
