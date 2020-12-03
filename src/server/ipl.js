@@ -9,6 +9,8 @@ const topTenEconomicBowlers = require('./ipl_stats/topTenEconomicBowlers');
 
 const outputPath = path.join(__dirname, '../public/output');
 const dbConnection = require('./databaseConnection');
+const queryList = require('./queries');
+const createQuery = require('./createQuery');
 
 const writeFile = (outputFilename, obj) => {
   return new Promise((resolve, reject) => {
@@ -58,9 +60,19 @@ const iplStats = async (csvPath) => {
       2015
     );
 
-    const connectionStatus = await dbConnection.connect();
-    console.log(connectionStatus);
-    dbConnection.query.end();
+    const connection = await dbConnection.connect();
+    const matchesExists = await createQuery(connection, queryList.matchesTableExist);
+    if (matchesExists[0].Exist !== 1) {
+      await createQuery(connection, queryList.createMatchesTable);
+      await createQuery(connection, 'SET GLOBAL local_infile=1');
+      await createQuery(
+        connection,
+        `load data local infile '${csvPath}/matches.csv' into table matches fields terminated by ',' enclosed by '"' lines terminated by '\n' ignore 1 rows;`
+      );
+      console.log(`data inserted`);
+    }
+
+    dbConnection.pool.end();
   } catch (err) {
     console.error(err);
   }

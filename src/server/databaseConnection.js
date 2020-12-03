@@ -1,7 +1,8 @@
 const mysql = require('mysql');
 const env = require('./config');
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 10,
   host: env.host,
   user: env.user,
   password: env.pass,
@@ -10,20 +11,19 @@ const connection = mysql.createConnection({
 
 const connect = () => {
   return new Promise((resolve, reject) => {
-    connection.connect((err) => {
-      if (err) {
-        console.error('error connecting..');
-        reject(err);
-        return;
-      }
-      resolve('Connection Established');
-    });
+    pool.getConnection((err,connection)=>{
+        if(err){
+            return reject(err)
+        }
+        console.log('Connection Established');
+        resolve(connection)
+    })
   });
 };
 
-module.exports = {
-  connect,
-  query: connection,
-};
+module.exports = { 
+    pool,
+    connect
+ };
 
 
