@@ -8,7 +8,7 @@ const extraRunsConcededPerTeam = require('./ipl_stats/extraRunsConcededPerTeam')
 const topTenEconomicBowlers = require('./ipl_stats/topTenEconomicBowlers');
 
 const outputPath = path.join(__dirname, '../public/output');
-
+const dbConnection = require('./databaseConnection');
 
 const writeFile = (outputFilename, obj) => {
   return new Promise((resolve, reject) => {
@@ -38,30 +38,32 @@ const callFunctions = async (fileName, objCall, csvArray, year) => {
 };
 
 const iplStats = async (csvPath) => {
-  try{
-      
-      const matchesArray = await csvToJson(csvPath, 'matches.csv');
-      const deliveriesArray = await csvToJson(csvPath, 'deliveries.csv');
+  try {
+    const matchesArray = await csvToJson(csvPath, 'matches.csv');
+    const deliveriesArray = await csvToJson(csvPath, 'deliveries.csv');
 
-      callFunctions('matchesPerYear.json', matchesPerYear, [matchesArray]);
-      callFunctions('teamWonMatchesPerYear.json', teamWonMatchesPerYear, [matchesArray]);
+    callFunctions('matchesPerYear.json', matchesPerYear, [matchesArray]);
+    callFunctions('teamWonMatchesPerYear.json', teamWonMatchesPerYear, [matchesArray]);
 
-      callFunctions(
-        'extraRunsConcededPerTeam.json',
-        extraRunsConcededPerTeam,
-        [matchesArray, deliveriesArray],
-        2016
-      );
-      callFunctions(
-        'topTenEconomicBowlers.json',
-        topTenEconomicBowlers,
-        [matchesArray, deliveriesArray],
-        2015
-      );
+    callFunctions(
+      'extraRunsConcededPerTeam.json',
+      extraRunsConcededPerTeam,
+      [matchesArray, deliveriesArray],
+      2016
+    );
+    callFunctions(
+      'topTenEconomicBowlers.json',
+      topTenEconomicBowlers,
+      [matchesArray, deliveriesArray],
+      2015
+    );
 
-  }catch(err){
+    const connectionStatus = await dbConnection.connect();
+    console.log(connectionStatus);
+    dbConnection.query.end();
+  } catch (err) {
     console.error(err);
   }
 };
 
-module.exports= iplStats;
+module.exports = iplStats;
