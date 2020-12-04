@@ -35,7 +35,7 @@ const queries = {
     umpire2 VARCHAR(40) NOT NULL
   )`,
 
-  createDeliveriesTable:`CREATE TABLE deliveries(
+  createDeliveriesTable: `CREATE TABLE deliveries(
     match_id INT NOT NULL,
     FOREIGN KEY(match_id) REFERENCES matches(id),
     inning INT,
@@ -59,8 +59,13 @@ const queries = {
     fielder VARCHAR(40)	
   )`,
 
-  dropMatchesTable:`DROP TABLE matches`,
-  dropDeliveriesTable:`DROP TABLE deliveries`
+  dropMatchesTable: `DROP TABLE matches`,
+  dropDeliveriesTable: `DROP TABLE deliveries`,
+
+  selectMatchesPerYear: `SELECT season,COUNT(season) AS matches 
+    FROM matches 
+    GROUP BY season 
+    ORDER BY season`,
 };
 
 module.exports = queries;

@@ -1,15 +1,20 @@
-const matchesPerYear = (matchesArray) => {
-  const matchesPerYearObject = matchesArray.reduce((acc, obj) => {
-    if (acc[obj.season] === undefined) {
-      acc[obj.season] = 1;
-    } else {
-      acc[obj.season] += 1;
-    }
-    
-    return acc;
-  }, {});
+const queryList = require('../queries');
+const createQuery = require('../createQuery');
 
-  return matchesPerYearObject;
+const matchesPerYear = (connection) => {
+  return new Promise((resolve, reject) => {
+    createQuery(connection, queryList.selectMatchesPerYear)
+      .then((data) => {
+        const matchesPerYearObject = data.reduce((acc, obj) => {
+          acc[obj.season] = obj.matches;
+          return acc;
+        }, {});
+        return resolve(matchesPerYearObject);
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
 };
 
 module.exports = matchesPerYear;
