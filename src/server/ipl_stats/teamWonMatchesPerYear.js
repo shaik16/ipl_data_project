@@ -1,22 +1,24 @@
-const teamWonMatchesPerYear = (matchesArray) => {
-  const teamWonMatchesPerYearObject = matchesArray
-  .reduce((acc, obj) => {
-    if(obj.result !== 'no result'){
-      if (acc[obj.season] === undefined) {
-        acc[obj.season] = {};
-      }
+const queryList = require('../queries');
+const createQuery = require('../createQuery');
 
-      if (acc[obj.season][obj.winner] === undefined) {
-        acc[obj.season][obj.winner] = 1;
-      } else {
-        acc[obj.season][obj.winner] += 1;
-      }
-    }
+const teamWonMatchesPerYear = (connection) => {
+  return new Promise((resolve, reject) => {
+    createQuery(connection, queryList.selectTeamWonPerYear)
+      .then((data) => {
+        const teamWonMatchesPerYearObject = data.reduce((acc, obj) => {
+          if (acc[obj.season] === undefined) {
+            acc[obj.season] = {};
+          }
+          acc[obj.season][obj.team] = obj.wins;
+          return acc;
+        }, {});
 
-    return acc;
-  }, {});
-
-  return teamWonMatchesPerYearObject;
+        return resolve(teamWonMatchesPerYearObject);
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
 };
 
 module.exports = teamWonMatchesPerYear;

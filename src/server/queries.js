@@ -66,6 +66,11 @@ const queries = {
     FROM matches 
     GROUP BY season 
     ORDER BY season`,
+  selectTeamWonPerYear: `SELECT season,winner AS team,COUNT(winner) AS wins
+    FROM matches
+    WHERE winner != ''
+    GROUP BY season,winner
+    ORDER BY season`,
 };
 
 module.exports = queries;
