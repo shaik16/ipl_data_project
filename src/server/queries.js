@@ -5,7 +5,7 @@ const queries = {
     WHERE 
     table_schema LIKE 'iplData' AND 
     table_name LIKE 'matches'
-    ) as Exist`,
+  ) as Exist`,
 
   deliveriesTableExist: `SELECT EXISTS(
     SELECT *
@@ -13,14 +13,14 @@ const queries = {
     WHERE 
     table_schema LIKE 'iplData' AND 
     table_name LIKE 'deliveries'
-    ) as Exist`,
+  ) as Exist`,
 
   createMatchesTable: `CREATE TABLE matches(
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	  id INT PRIMARY KEY AUTO_INCREMENT,
     season INT NOT NULL,
     city VARCHAR(20) NOT NULL,
     date DATE NOT NULL,
-	team1 VARCHAR(50) NOT NULL,
+	  team1 VARCHAR(50) NOT NULL,
     team2 VARCHAR(50) NOT NULL,
     toss_winner VARCHAR(50) NOT NULL,
     toss_decision VARCHAR(10) NOT NULL,
@@ -33,7 +33,34 @@ const queries = {
     venue VARCHAR(100) NOT NULL,
     umpire1 VARCHAR(40) NOT NULL,
     umpire2 VARCHAR(40) NOT NULL
-    )`,
+  )`,
+
+  createDeliveriesTable:`CREATE TABLE deliveries(
+    match_id INT NOT NULL,
+    FOREIGN KEY(match_id) REFERENCES matches(id),
+    inning INT,
+    batting_team VARCHAR(50),
+    bowling_team VARCHAR(50),
+    overs INT, 
+    ball INT,
+    batsman VARCHAR(30),
+    non_striker VARCHAR(30),
+    bowler VARCHAR(30),
+    is_super_over BIT,
+    wide_runs INT,
+    bye_runs INT,
+    noball_runs INT,
+    penalty_runs INT,
+    batsman_runs INT,
+    extra_runs INT,
+    total_runs INT,
+    player_dismissed VARCHAR(30),
+    dismissal_kind VARCHAR(30),
+    fielder VARCHAR(40)	
+  )`,
+
+  dropMatchesTable:`DROP TABLE matches`,
+  dropDeliveriesTable:`DROP TABLE deliveries`
 };
 
 module.exports = queries;
