@@ -24,7 +24,7 @@ const writeFile = (outputFilename, obj) => {
 
 const iplStats = async (csvPath) => {
   try {
-    const connection = await dbConnection.connect();
+    // const connection = await dbConnection.connect();
     // await createQuery(connection, `SET GLOBAL local_infile='ON'`);
     // const matchesExists = await createQuery(connection, queryList.matchesTableExist);
     // const deliveriesExist = await createQuery(connection, queryList.deliveriesTableExist);
@@ -56,18 +56,18 @@ const iplStats = async (csvPath) => {
     // );
     // console.log('Deliveries data inserted successfully');
 
-    const matchesPerYearObject = await matchesPerYear(connection);
-    const matchesPerYearObjectStatus = await writeFile('matchesPerYear.json', matchesPerYearObject);
-    console.log(matchesPerYearObjectStatus);
+    // const matchesPerYearObject = await matchesPerYear(connection);
+    // const matchesPerYearObjectStatus = await writeFile('matchesPerYear.json', matchesPerYearObject);
+    // console.log(matchesPerYearObjectStatus);
 
-    const teamWonMatchesPerYearObject = await teamWonMatchesPerYear(connection);
-    const teamWonMatchesPerYearObjectStatus = await writeFile(
-      'teamWonMatchesPerYear.json',
-      teamWonMatchesPerYearObject
-    );
-    console.log(teamWonMatchesPerYearObjectStatus);
+    // const teamWonMatchesPerYearObject = await teamWonMatchesPerYear(connection);
+    // const teamWonMatchesPerYearObjectStatus = await writeFile(
+    //   'teamWonMatchesPerYear.json',
+    //   teamWonMatchesPerYearObject
+    // );
+    // console.log(teamWonMatchesPerYearObjectStatus);
 
-    dbConnection.pool.end();
+    // dbConnection.pool.end();
   } catch (err) {
     console.error(err);
   }

@@ -6,7 +6,7 @@ const matchesPerYearChart = async (id) => {
     const categories = Object.keys(data);
     const values = Object.values(data);
     
-    // eslint-disable-next-line no-undef
+    /* eslint-disable-next-line no-undef */
     Highcharts.chart(id, {
       chart: {
         type: 'column',

@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const dbConnection = require('./databaseConnection');
+const matchesPerYear = require('./ipl_stats/matchesPerYear');
+
 const readFile = (filePath) => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -28,8 +31,8 @@ const response = async (filePath, mime, res) => {
 
 const publicPath = path.join(__dirname, '../public');
 
-const routes = (req, res) => {
-  const {url} = req;
+const routes = async (req, res) => {
+  const { url } = req;
   switch (url) {
     case '/':
       response(`${publicPath}/index.html`, 'text/html', res);
@@ -49,18 +52,23 @@ const routes = (req, res) => {
     case '/charts/topTenEconomicBowlers.js':
       response(`${publicPath}/charts/topTenEconomicBowlers.js`, 'text/javascript', res);
       break;
-    case '/api/matchesPerYear':
-      response(`${publicPath}/output/matchesPerYear.json`, 'application/json', res);
+    case '/api/matchesPerYear': {
+      const connection = await dbConnection.connect();
+      const result = await matchesPerYear(connection);
+      res.writeHeader(200, { 'Content-type': 'application/json' });
+      res.end(JSON.stringify(result));
       break;
-    case '/api/teamWonPerYear':
-      response(`${publicPath}/output/teamWonMatchesPerYear.json`, 'application/json', res);
-      break;
-    case '/api/extraRunsPerTeam':
-      response(`${publicPath}/output/extraRunsConcededPerTeam.json`, 'application/json', res);
-      break;
-    case '/api/topTenEconomicBowlers':
-      response(`${publicPath}/output/topTenEconomicBowlers.json`, 'application/json', res);
-      break;
+    }
+    // case '/api/teamWonPerYear': {
+      
+    //   break;
+    // }
+    // case '/api/extraRunsPerTeam':
+    //   response(`${publicPath}/output/extraRunsConcededPerTeam.json`, 'application/json', res);
+    //   break;
+    // case '/api/topTenEconomicBowlers':
+    //   response(`${publicPath}/output/topTenEconomicBowlers.json`, 'application/json', res);
+    //   break;
     default:
       response(`${publicPath}/404.html`, 'text/html', res);
       break;
