@@ -71,7 +71,7 @@ const routes = async (req, res) => {
       connection.release();
       break;
     }
-    case '/api/extraRunsPerTeam':{
+    case '/api/extraRunsPerTeam': {
       const connection = await dbConnection.connect();
       const result = await extraRunsConcededPerTeam(connection);
       res.writeHeader(200, { 'Content-type': 'application/json' });
@@ -79,7 +79,7 @@ const routes = async (req, res) => {
       connection.release();
       break;
     }
-    case '/api/topTenEconomicBowlers':{
+    case '/api/topTenEconomicBowlers': {
       const connection = await dbConnection.connect();
       const result = await topTenEconomicBowlers(connection);
       res.writeHeader(200, { 'Content-type': 'application/json' });

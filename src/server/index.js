@@ -7,20 +7,16 @@ const env = require('./config');
 const csvFilePath = path.join(__dirname, '../data');
 
 const loadData = async () => {
-    try{
-        await iplStats(csvFilePath);
+  try {
+    await iplStats(csvFilePath);
 
-        const server = http.createServer(routes);
+    const server = http.createServer(routes);
 
-        server.listen(env.port, () =>
-          console.log(`server started on port ${server.address().port}`)
-        );
-    }catch(err){
-        console.log('Data loading Unsuccessful');
-        console.log(err);
-    }
+    server.listen(env.port, () => console.log(`server started on port ${server.address().port}`));
+  } catch (err) {
+    console.log('Data loading Unsuccessful');
+    console.log(err);
+  }
 };
 
 loadData();
-
-

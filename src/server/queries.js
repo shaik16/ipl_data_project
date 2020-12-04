@@ -1,19 +1,14 @@
 const queries = {
-  matchesTableExist: `SELECT EXISTS(
-    SELECT *
-    FROM   information_schema.tables 
-    WHERE 
-    table_schema LIKE 'iplData' AND 
-    table_name LIKE 'matches'
-  ) as Exist`,
-
-  deliveriesTableExist: `SELECT EXISTS(
-    SELECT *
-    FROM   information_schema.tables 
-    WHERE 
-    table_schema LIKE 'iplData' AND 
-    table_name LIKE 'deliveries'
-  ) as Exist`,
+  tableExistQuery:(tableName)=>{
+    return (`SELECT EXISTS(
+      SELECT *
+      FROM   information_schema.tables 
+      WHERE 
+      table_schema LIKE 'iplData' AND 
+      table_name LIKE '${tableName}'
+    ) as Exist`
+    )
+  },
 
   createMatchesTable: `CREATE TABLE matches(
 	  id INT PRIMARY KEY AUTO_INCREMENT,
@@ -60,8 +55,18 @@ const queries = {
     fielder VARCHAR(40)	
   )`,
 
-  dropMatchesTable: `DROP TABLE matches`,
-  dropDeliveriesTable: `DROP TABLE deliveries`,
+  insertData:(csvPath,fileName)=>{
+    return (`LOAD DATA
+      LOCAL INFILE '${csvPath}/${fileName}.csv'
+      INTO TABLE ${fileName}
+      FIELDS TERMINATED BY ','
+      LINES TERMINATED BY '\n' IGNORE 1 ROWS;`
+    )
+  },
+
+  dropTableQuery:(tableName)=>{
+    return (`DROP TABLE ${tableName}`)
+  },
 
   selectMatchesPerYear: `SELECT season,COUNT(season) AS matches 
     FROM matches 
@@ -101,3 +106,4 @@ const queries = {
 };
 
 module.exports = queries;
+  
