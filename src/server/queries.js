@@ -78,6 +78,26 @@ const queries = {
 	    ON matches.id=deliveries.match_id
     WHERE season = 2016 
     GROUP BY bowling_team;`,
+  selectTopTenEconomicBowlers: `SELECT season,bowler,SUM(total_runs) AS runs_conceded,
+    round((floor(count(ball)/6)+(count(ball)-floor(count(ball)/6)*6)/10),1) AS overs,
+    round((sum(total_runs)/(count(ball)*(10/6))*10),2) AS Economy
+    FROM matches
+    INNER JOIN deliveries
+	    ON matches.id=deliveries.match_id
+    WHERE season = 2015 AND
+      ball IN(
+	      SELECT ball
+        FROM deliveries
+        WHERE wide_runs=0 AND noball_runs=0
+      )
+    AND
+      total_runs IN(
+	      SELECT total_runs
+        FROM deliveries
+        WHERE bye_runs=0 AND leg_bye_runs=0
+      )
+    GROUP BY bowler
+    ORDER BY Economy LIMIT 10;`,
 };
 
 module.exports = queries;

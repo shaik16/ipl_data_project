@@ -5,6 +5,7 @@ const dbConnection = require('./databaseConnection');
 const matchesPerYear = require('./ipl_stats/matchesPerYear');
 const teamWonMatchesPerYear = require('./ipl_stats/teamWonMatchesPerYear');
 const extraRunsConcededPerTeam = require('./ipl_stats/extraRunsConcededPerTeam');
+const topTenEconomicBowlers = require('./ipl_stats/topTenEconomicBowlers');
 
 const readFile = (filePath) => {
   return new Promise((resolve, reject) => {
@@ -59,6 +60,7 @@ const routes = async (req, res) => {
       const result = await matchesPerYear(connection);
       res.writeHeader(200, { 'Content-type': 'application/json' });
       res.end(JSON.stringify(result));
+      connection.release();
       break;
     }
     case '/api/teamWonPerYear': {
@@ -66,6 +68,7 @@ const routes = async (req, res) => {
       const result = await teamWonMatchesPerYear(connection);
       res.writeHeader(200, { 'Content-type': 'application/json' });
       res.end(JSON.stringify(result));
+      connection.release();
       break;
     }
     case '/api/extraRunsPerTeam':{
@@ -73,11 +76,17 @@ const routes = async (req, res) => {
       const result = await extraRunsConcededPerTeam(connection);
       res.writeHeader(200, { 'Content-type': 'application/json' });
       res.end(JSON.stringify(result));
+      connection.release();
       break;
     }
-    // case '/api/topTenEconomicBowlers':
-    //   response(`${publicPath}/output/topTenEconomicBowlers.json`, 'application/json', res);
-    //   break;
+    case '/api/topTenEconomicBowlers':{
+      const connection = await dbConnection.connect();
+      const result = await topTenEconomicBowlers(connection);
+      res.writeHeader(200, { 'Content-type': 'application/json' });
+      res.end(JSON.stringify(result));
+      connection.release();
+      break;
+    }
     default:
       response(`${publicPath}/404.html`, 'text/html', res);
       break;
