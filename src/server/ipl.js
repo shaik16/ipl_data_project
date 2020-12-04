@@ -1,9 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const matchesPerYear = require('./ipl_stats/matchesPerYear');
-const teamWonMatchesPerYear = require('./ipl_stats/teamWonMatchesPerYear');
-// const extraRunsConcededPerTeam = require('./ipl_stats/extraRunsConcededPerTeam');
 // const topTenEconomicBowlers = require('./ipl_stats/topTenEconomicBowlers');
 
 const outputPath = path.join(__dirname, '../public/output');
@@ -66,7 +63,6 @@ const iplStats = async (csvPath) => {
     //   teamWonMatchesPerYearObject
     // );
     // console.log(teamWonMatchesPerYearObjectStatus);
-
     // dbConnection.pool.end();
   } catch (err) {
     console.error(err);

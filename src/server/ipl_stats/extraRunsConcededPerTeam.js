@@ -1,27 +1,25 @@
-const arrayOfMatchesId = require('./arrayOfMatchesId');
+const queryList = require('../queries');
+const createQuery = require('../createQuery');
 
-const extraRunsConcededPerTeam = (matchesArray, deliveriesArray, year) => {
-  const arrayOfId = arrayOfMatchesId(year, matchesArray);
+const extraRunsConcededPerTeam = (connection) => {
+  return new Promise((resolve, reject) => {
+    createQuery(connection, queryList.selectExtraRunsConcededPerTeam)
+      .then((data) => {
+        const extraRunsConcededPerTeamPerTeamObject = data.reduce((acc, obj) => {
+          if (acc[obj.season] === undefined) {
+            acc[obj.season] = {};
+          }
+          acc[obj.season][obj.team] = obj.runs;
+          
+          return acc;
+        }, {});
 
-  const extraRunsConcededPerTeamPerTeamObject = deliveriesArray
-  .reduce(
-    (acc, obj) => {
-      if (arrayOfId.includes(obj.match_id)) {
-        if (acc[year][obj.bowling_team] === undefined) {
-          acc[year][obj.bowling_team] = 0;
-        } else {
-          acc[year][obj.bowling_team] += Number(obj.extra_runs);
-        }
-      }
-
-      return acc;
-    },
-    {
-      [year]: {},
-    }
-  );
-
-  return extraRunsConcededPerTeamPerTeamObject;
+        return resolve(extraRunsConcededPerTeamPerTeamObject);
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
 };
 
 module.exports = extraRunsConcededPerTeam;

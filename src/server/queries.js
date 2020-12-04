@@ -72,6 +72,12 @@ const queries = {
     WHERE winner != ''
     GROUP BY season,winner
     ORDER BY season`,
+  selectExtraRunsConcededPerTeam: `SELECT season,bowling_team AS team,SUM(extra_runs) AS runs
+    FROM matches
+    INNER JOIN deliveries
+	    ON matches.id=deliveries.match_id
+    WHERE season = 2016 
+    GROUP BY bowling_team;`,
 };
 
 module.exports = queries;

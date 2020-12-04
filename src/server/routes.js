@@ -4,6 +4,7 @@ const path = require('path');
 const dbConnection = require('./databaseConnection');
 const matchesPerYear = require('./ipl_stats/matchesPerYear');
 const teamWonMatchesPerYear = require('./ipl_stats/teamWonMatchesPerYear');
+const extraRunsConcededPerTeam = require('./ipl_stats/extraRunsConcededPerTeam');
 
 const readFile = (filePath) => {
   return new Promise((resolve, reject) => {
@@ -67,9 +68,13 @@ const routes = async (req, res) => {
       res.end(JSON.stringify(result));
       break;
     }
-    // case '/api/extraRunsPerTeam':
-    //   response(`${publicPath}/output/extraRunsConcededPerTeam.json`, 'application/json', res);
-    //   break;
+    case '/api/extraRunsPerTeam':{
+      const connection = await dbConnection.connect();
+      const result = await extraRunsConcededPerTeam(connection);
+      res.writeHeader(200, { 'Content-type': 'application/json' });
+      res.end(JSON.stringify(result));
+      break;
+    }
     // case '/api/topTenEconomicBowlers':
     //   response(`${publicPath}/output/topTenEconomicBowlers.json`, 'application/json', res);
     //   break;
