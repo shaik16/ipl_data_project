@@ -1,9 +1,12 @@
 const queryList = require('../queries');
 const createQuery = require('../createQuery');
 
-const topTenEconomicBowlers = (connection) => {
+const topTenEconomicBowlers = (connection, year) => {
   return new Promise((resolve, reject) => {
-    createQuery(connection, queryList.selectTopTenEconomicBowlers)
+    createQuery(
+      connection,
+      queryList.selectTopTenEconomicBowlersQuery('matches', 'deliveries', year)
+    )
       .then((data) => {
         const topTenEconomicBowlersObject = data.reduce((acc, obj) => {
           if (acc[obj.season] === undefined) {

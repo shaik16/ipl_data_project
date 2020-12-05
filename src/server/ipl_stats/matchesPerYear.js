@@ -3,7 +3,7 @@ const createQuery = require('../createQuery');
 
 const matchesPerYear = (connection) => {
   return new Promise((resolve, reject) => {
-    createQuery(connection, queryList.selectMatchesPerYear)
+    createQuery(connection, queryList.selectMatchesPerYearQuery('matches'))
       .then((data) => {
         const matchesPerYearObject = data.reduce((acc, obj) => {
           acc[obj.season] = obj.matches;

@@ -1,13 +1,12 @@
 const queries = {
-  tableExistQuery:(tableName)=>{
-    return (`SELECT EXISTS(
+  tableExistQuery: (tableName) => {
+    return `SELECT EXISTS(
       SELECT *
       FROM   information_schema.tables 
       WHERE 
       table_schema LIKE 'iplData' AND 
       table_name LIKE '${tableName}'
-    ) as Exist`
-    )
+    ) as Exist`;
   },
 
   createMatchesTable: `CREATE TABLE matches(
@@ -55,55 +54,64 @@ const queries = {
     fielder VARCHAR(40)	
   )`,
 
-  insertData:(csvPath,fileName)=>{
-    return (`LOAD DATA
+  insertData: (csvPath, fileName) => {
+    return `LOAD DATA
       LOCAL INFILE '${csvPath}/${fileName}.csv'
       INTO TABLE ${fileName}
       FIELDS TERMINATED BY ','
-      LINES TERMINATED BY '\n' IGNORE 1 ROWS;`
-    )
+      LINES TERMINATED BY '\n' IGNORE 1 ROWS;`;
   },
 
-  dropTableQuery:(tableName)=>{
-    return (`DROP TABLE ${tableName}`)
+  dropTableQuery: (tableName) => {
+    return `DROP TABLE ${tableName}`;
   },
 
-  selectMatchesPerYear: `SELECT season,COUNT(season) AS matches 
-    FROM matches 
+  selectMatchesPerYearQuery: (matchesTableName) => {
+    return `SELECT season,COUNT(season) AS matches 
+    FROM ${matchesTableName} 
     GROUP BY season 
-    ORDER BY season`,
-  selectTeamWonPerYear: `SELECT season,winner AS team,COUNT(winner) AS wins
-    FROM matches
+    ORDER BY season`;
+  },
+
+  selectTeamWonPerYearQuery: (matchesTableName) => {
+    return `SELECT season,winner AS team,COUNT(winner) AS wins
+    FROM ${matchesTableName}
     WHERE winner != ''
     GROUP BY season,winner
-    ORDER BY season`,
-  selectExtraRunsConcededPerTeam: `SELECT season,bowling_team AS team,SUM(extra_runs) AS runs
-    FROM matches
-    INNER JOIN deliveries
-	    ON matches.id=deliveries.match_id
-    WHERE season = 2016 
-    GROUP BY bowling_team;`,
-  selectTopTenEconomicBowlers: `SELECT season,bowler,SUM(total_runs) AS runs_conceded,
+    ORDER BY season`;
+  },
+
+  selectExtraRunsConcededPerTeamQuery: (matchesTableName, deliveriesTableName, year) => {
+    return `SELECT season,bowling_team AS team,SUM(extra_runs) AS runs
+    FROM ${matchesTableName}
+    INNER JOIN ${deliveriesTableName}
+	    ON ${matchesTableName}.id=${deliveriesTableName}.match_id
+    WHERE season = ${year} 
+    GROUP BY bowling_team`;
+  },
+
+  selectTopTenEconomicBowlersQuery: (matchesTableName, deliveriesTableName, year) => {
+    return `SELECT season,bowler,SUM(total_runs) AS runs_conceded,
     round((floor(count(ball)/6)+(count(ball)-floor(count(ball)/6)*6)/10),1) AS overs,
     round((sum(total_runs)/(count(ball)*(10/6))*10),2) AS Economy
-    FROM matches
-    INNER JOIN deliveries
-	    ON matches.id=deliveries.match_id
-    WHERE season = 2015 AND
+    FROM ${matchesTableName}
+    INNER JOIN ${deliveriesTableName}
+	    ON ${matchesTableName}.id=${deliveriesTableName}.match_id
+    WHERE season = ${year} AND
       ball IN(
 	      SELECT ball
-        FROM deliveries
+        FROM ${deliveriesTableName}
         WHERE wide_runs=0 AND noball_runs=0
       )
     AND
       total_runs IN(
 	      SELECT total_runs
-        FROM deliveries
+        FROM ${deliveriesTableName}
         WHERE bye_runs=0 AND leg_bye_runs=0
       )
     GROUP BY bowler
-    ORDER BY Economy LIMIT 10;`,
+    ORDER BY Economy LIMIT 10`;
+  },
 };
 
 module.exports = queries;
-  

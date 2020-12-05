@@ -73,7 +73,7 @@ const routes = async (req, res) => {
     }
     case '/api/extraRunsPerTeam': {
       const connection = await dbConnection.connect();
-      const result = await extraRunsConcededPerTeam(connection);
+      const result = await extraRunsConcededPerTeam(connection, 2016);
       res.writeHeader(200, { 'Content-type': 'application/json' });
       res.end(JSON.stringify(result));
       connection.release();
@@ -81,7 +81,7 @@ const routes = async (req, res) => {
     }
     case '/api/topTenEconomicBowlers': {
       const connection = await dbConnection.connect();
-      const result = await topTenEconomicBowlers(connection);
+      const result = await topTenEconomicBowlers(connection, 2015);
       res.writeHeader(200, { 'Content-type': 'application/json' });
       res.end(JSON.stringify(result));
       connection.release();
