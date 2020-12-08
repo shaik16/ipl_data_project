@@ -8,9 +8,10 @@ const queries = {
       table_name LIKE '${tableName}'
     ) as Exist`;
   },
-  insertQuery: (tableName)=>{
-    return `INSERT INTO ${tableName} VALUES ?` 
+  insertQuery: (tableName) => {
+    return `INSERT INTO ${tableName} VALUES ?`;
   },
+
   createMatchesTable: `CREATE TABLE matches(
 	  id INT PRIMARY KEY AUTO_INCREMENT,
     season INT NOT NULL,

@@ -10,13 +10,16 @@ const iplStats = async (csvPath) => {
     const matchesArray = await csvToJson(csvPath, 'matches.csv');
     const deliveriesArray = await csvToJson(csvPath, 'deliveries.csv');
 
-
     const connection = await dbConnection.connect();
 
-
-    const matchesExists = await createQuery(connection, queryList.tableExistQuery('matches',env.DB));
-    const deliveriesExist = await createQuery(connection, queryList.tableExistQuery('deliveries',env.DB));
-
+    const matchesExists = await createQuery(
+      connection,
+      queryList.tableExistQuery('matches', env.DB)
+    );
+    const deliveriesExist = await createQuery(
+      connection,
+      queryList.tableExistQuery('deliveries', env.DB)
+    );
 
     if (deliveriesExist[0].Exist !== 1) {
       await createQuery(connection, queryList.createMatchesTable);
