@@ -17,6 +17,6 @@ const csvFilePath = path.join(__dirname, '../data');
 
 iplStats(csvFilePath);
 
-app.listen(env.port, () => {
+app.listen( process.env.PORT || env.port, () => {
   console.log(`Server started on ${env.port}`);
 });
