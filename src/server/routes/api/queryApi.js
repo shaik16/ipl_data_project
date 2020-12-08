@@ -1,6 +1,6 @@
 const express = require('express');
 
-const dbConnection = require('../../databaseConnection');
+const dbConnection = require('../../databaseOperations/databaseConnection');
 const matchesPerYear = require('../../ipl_stats/matchesPerYear');
 const teamWonMatchesPerYear = require('../../ipl_stats/teamWonMatchesPerYear');
 const extraRunsConcededPerTeam = require('../../ipl_stats/extraRunsConcededPerTeam');

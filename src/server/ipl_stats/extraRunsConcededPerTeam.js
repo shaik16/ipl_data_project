@@ -1,5 +1,5 @@
-const queryList = require('../queries');
-const createQuery = require('../createQuery');
+const queryList = require('../databaseOperations/queries');
+const createQuery = require('../databaseOperations/createQuery');
 
 const extraRunsConcededPerTeam = (connection, year) => {
   return new Promise((resolve, reject) => {

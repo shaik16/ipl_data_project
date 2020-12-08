@@ -1,14 +1,16 @@
 const queries = {
-  tableExistQuery: (tableName) => {
+  tableExistQuery: (tableName, dbName) => {
     return `SELECT EXISTS(
       SELECT *
       FROM   information_schema.tables 
       WHERE 
-      table_schema LIKE 'iplData' AND 
+      table_schema LIKE '${dbName}' AND 
       table_name LIKE '${tableName}'
     ) as Exist`;
   },
-
+  insertQuery: (tableName)=>{
+    return `INSERT INTO ${tableName} VALUES ?` 
+  },
   createMatchesTable: `CREATE TABLE matches(
 	  id INT PRIMARY KEY AUTO_INCREMENT,
     season INT NOT NULL,
@@ -19,14 +21,15 @@ const queries = {
     toss_winner VARCHAR(50) NOT NULL,
     toss_decision VARCHAR(10) NOT NULL,
     result VARCHAR(15) NOT NULL,
-    dl_applied BIT NOT NULL,
+    dl_applied INT NOT NULL,
     winner VARCHAR(50) NOT NULL,
     win_by_runs INT NOT NULL,
     win_by_wickets INT NOT NULL,
     player_of_match VARCHAR(30) NOT NULL,
     venue VARCHAR(100) NOT NULL,
     umpire1 VARCHAR(40) NOT NULL,
-    umpire2 VARCHAR(40) NOT NULL
+    umpire2 VARCHAR(40) NOT NULL,
+    umpire3 VARCHAR(40)
   )`,
 
   createDeliveriesTable: `CREATE TABLE deliveries(

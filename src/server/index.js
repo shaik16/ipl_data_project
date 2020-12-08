@@ -15,17 +15,8 @@ app.get('*', (req, res) => {
 
 const csvFilePath = path.join(__dirname, '../data');
 
-const loadData = async () => {
-  try {
-    await iplStats(csvFilePath);
+iplStats(csvFilePath);
 
-    app.listen(env.port, () => {
-      console.log(`Server started on ${env.port}`);
-    });
-  } catch (err) {
-    console.log('Data loading Unsuccessful');
-    console.log(err);
-  }
-};
-
-loadData();
+app.listen(env.port, () => {
+  console.log(`Server started on ${env.port}`);
+});
